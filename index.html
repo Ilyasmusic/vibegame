@@ -2,7 +2,8 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Игра Ильяса — с анимацией и музыкой</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Игра Ильяса — сенсорная версия</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         body {
@@ -14,6 +15,7 @@
             align-items: center;
             font-family: Arial, sans-serif;
             text-align: center;
+            touch-action: none; /* отключаем прокрутку на body, но внутри элементов можно */
         }
 
         #counter {
@@ -45,6 +47,8 @@
             box-shadow: 0 4px 8px rgba(0,0,0,0.2);
             cursor: pointer;
             transition: transform 0.2s;
+            touch-action: none; /* запрещаем прокрутку внутри иконок */
+            user-select: none;   /* запрещаем выделение текста */
         }
 
         .folder-icon {
@@ -233,6 +237,27 @@
         #leaderboard tr:nth-child(even) {
             background-color: #f9f9f9;
         }
+
+        /* Мобильные стили: увеличиваем иконки */
+        @media (max-width: 768px) {
+            .folder-icon, .file-icon, .trash-icon, .cart-icon {
+                width: 100px;
+                height: 100px;
+                font-size: 60px;
+            }
+            #counter, #stopwatch, #mistakeCounter {
+                font-size: 20px;
+                padding: 8px 16px;
+            }
+            .message-box {
+                padding: 20px 30px;
+                font-size: 24px;
+            }
+            #startBtn {
+                font-size: 24px;
+                padding: 20px 30px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -248,7 +273,6 @@
         <i class="fas fa-trash"></i>
     </div>
 
-    <!-- Контейнер для кнопки и ползунка -->
     <div class="controls" id="controls">
         <button id="startBtn">Начать игру</button>
         <div>
@@ -257,7 +281,6 @@
         </div>
     </div>
 
-    <!-- Лидерборд -->
     <div id="leaderboard">
         <h2>Таблица рекордов</h2>
         <label>Объектов:
@@ -299,7 +322,6 @@
 
     <script>
         (function() {
-            // Элементы интерфейса
             const countSlider = document.getElementById('countSlider');
             const sliderValue = document.getElementById('sliderValue');
             const startBtn = document.getElementById('startBtn');
@@ -323,7 +345,7 @@
 
             // --- Звуки и музыка ---
             let audioCtx = null;
-            let musicInterval = null; // для фоновой музыки
+            let musicInterval = null;
 
             function initAudio() {
                 if (!audioCtx) {
@@ -426,78 +448,46 @@
                 }
                 stopMusic();
 
-                // Простая последовательность нот (мелодия)
                 const melodyNotes = [
-    { freq: 440, dur: 0.3 }, // ля (A4)
-    { freq: 494, dur: 0.3 }, // си (B4)
-    { freq: 523, dur: 0.3 }, // до (C5)
-    { freq: 587, dur: 0.3 }, // ре (D5)
-    { freq: 659, dur: 0.3 }, // ми (E5)
-    { freq: 587, dur: 0.3 }, // ре (D5)
-    { freq: 523, dur: 0.3 }, // до (C5)
-    { freq: 494, dur: 0.3 }, // си (B4)
-    { freq: 440, dur: 0.3 }, // ля (A4)
-    { freq: 494, dur: 0.3 }, // си (B4)
-    { freq: 523, dur: 0.3 }, // до (C5)
-    { freq: 587, dur: 0.3 }, // ре (D5)
-    { freq: 659, dur: 0.3 }, // ми (E5)
-    { freq: 587, dur: 0.3 }, // ре (D5)
-    { freq: 523, dur: 0.3 }, // до (C5)
-    { freq: 494, dur: 0.3 }, // си (B4)
-    { freq: 587, dur: 0.3 }, // ре (D5)
-    { freq: 659, dur: 0.3 }, // ми (E5)
-    { freq: 698, dur: 0.3 }, // фа (F5)
-    { freq: 784, dur: 0.3 }, // соль (G5)
-    { freq: 880, dur: 0.6 }, // ля (A5)
-    { freq: 784, dur: 0.3 }, // соль (G5)
-    { freq: 698, dur: 0.3 }, // фа (F5)
-    { freq: 659, dur: 0.3 }, // ми (E5)
-    { freq: 659, dur: 0.3 }, // ми (E5)
-    { freq: 988, dur: 0.3 }, // си (B5)
-    { freq: 659, dur: 0.3 }, // ми (E5)
-    { freq: 698, dur: 0.6 }, // фа (F5)
-    { freq: 659, dur: 0.3 }, // ми (E5)
-    { freq: 698, dur: 0.3 }, // фа (F5)
-    { freq: 740, dur: 0.3 }, // фа-диез (F#5)
-    { freq: 831, dur: 0.3 }  // соль-диез (G#5)
-];
-               
+                    { freq: 440, dur: 0.3 }, // ля (A4)
+                    { freq: 494, dur: 0.3 }, // си (B4)
+                    { freq: 523, dur: 0.3 }, // до (C5)
+                    { freq: 587, dur: 0.3 }, // ре (D5)
+                    { freq: 659, dur: 0.3 }, // ми (E5)
+                    { freq: 587, dur: 0.3 }, // ре (D5)
+                    { freq: 523, dur: 0.3 }, // до (C5)
+                    { freq: 494, dur: 0.3 }, // си (B4)
+                    { freq: 440, dur: 0.3 }, // ля (A4)
+                    { freq: 494, dur: 0.3 }, // си (B4)
+                    { freq: 523, dur: 0.3 }, // до (C5)
+                    { freq: 587, dur: 0.3 }, // ре (D5)
+                    { freq: 659, dur: 0.3 }, // ми (E5)
+                    { freq: 587, dur: 0.3 }, // ре (D5)
+                    { freq: 523, dur: 0.3 }, // до (C5)
+                    { freq: 494, dur: 0.3 }, // си (B4)
+                    { freq: 587, dur: 0.3 }, // ре (D5)
+                    { freq: 659, dur: 0.3 }, // ми (E5)
+                    { freq: 698, dur: 0.3 }, // фа (F5)
+                    { freq: 784, dur: 0.3 }, // соль (G5)
+                    { freq: 880, dur: 0.6 }, // ля (A5)
+                    { freq: 784, dur: 0.3 }, // соль (G5)
+                    { freq: 698, dur: 0.3 }, // фа (F5)
+                    { freq: 659, dur: 0.3 }, // ми (E5)
+                    { freq: 659, dur: 0.3 }, // ми (E5)
+                    { freq: 988, dur: 0.3 }, // си (B5)
+                    { freq: 659, dur: 0.3 }, // ми (E5)
+                    { freq: 698, dur: 0.6 }, // фа (F5)
+                    { freq: 659, dur: 0.3 }, // ми (E5)
+                    { freq: 698, dur: 0.3 }, // фа (F5)
+                    { freq: 740, dur: 0.3 }, // фа-диез (F#5)
+                    { freq: 831, dur: 0.3 }  // соль-диез (G#5)
+                ];
 
-                // Басы (треугольная волна)
                 const bassNotes = [
-                    { freq: 110, dur: 0.3 }, //ля
-                     { freq: 110, dur: 0.3 },
-                     { freq: 110, dur: 0.3 },
-                     { freq: 110, dur: 0.3 },
-                     { freq: 110, dur: 0.3 },
-                     { freq: 110, dur: 0.3 },
-                     { freq: 110, dur: 0.3 },
-                     { freq: 110, dur: 0.3 },
-                        { freq: 110, dur: 0.3 },
-                     { freq: 110, dur: 0.3 },
-                     { freq: 110, dur: 0.3 },
-                     { freq: 110, dur: 0.3 },
-                     { freq: 110, dur: 0.3 },
-                     { freq: 110, dur: 0.3 },
-                     { freq: 110, dur: 0.3 },
-                     { freq: 110, dur: 0.3 },
-                        { freq: 147, dur: 0.3 },
-                      { freq: 147, dur: 0.3 },
-                      { freq: 147, dur: 0.3 },
-                      { freq: 147, dur: 0.3 },
-                      { freq: 147, dur: 0.3 },
-                      { freq: 147, dur: 0.3 },
-                      { freq: 147, dur: 0.3 },
-                      { freq: 147, dur: 0.3 },
-                         { freq: 165, dur: 0.3 },
-                       { freq: 165, dur: 0.3 },
-                       { freq: 165, dur: 0.3 },
-                       { freq: 165, dur: 0.3 },
-                       { freq: 165, dur: 0.3 },
-                       { freq: 165, dur: 0.3 },
-                       { freq: 165, dur: 0.3 },
-                       { freq: 165, dur: 0.3 },
-
+                    { freq: 110, dur: 1.2 },
+                    { freq: 110, dur: 1.2 },
+                    { freq: 110, dur: 1.2 },
+                    { freq: 110, dur: 1.2 },
                 ];
 
                 let melodyIndex = 0;
@@ -506,31 +496,28 @@
                 function playNext() {
                     const now = audioCtx.currentTime;
 
-                    // Мелодия (прямоугольная волна)
                     const note = melodyNotes[melodyIndex % melodyNotes.length];
                     const osc1 = audioCtx.createOscillator();
                     osc1.type = 'square';
                     osc1.frequency.value = note.freq;
                     const gain1 = audioCtx.createGain();
-                    gain1.gain.value = 0.06;
+                    gain1.gain.value = 0.1;
                     osc1.connect(gain1);
                     gain1.connect(audioCtx.destination);
                     osc1.start(now);
                     osc1.stop(now + note.dur);
 
-                    // Бас (треугольная волна)
                     const bassNote = bassNotes[bassIndex % bassNotes.length];
                     const osc2 = audioCtx.createOscillator();
                     osc2.type = 'triangle';
                     osc2.frequency.value = bassNote.freq;
                     const gain2 = audioCtx.createGain();
-                    gain2.gain.value = 0.1;
+                    gain2.gain.value = 0.15;
                     osc2.connect(gain2);
                     gain2.connect(audioCtx.destination);
                     osc2.start(now);
                     osc2.stop(now + bassNote.dur);
 
-                    // Ударные (шум) — хай-хэт
                     if (melodyIndex % 2 === 0) {
                         const buffer = audioCtx.createBuffer(1, audioCtx.sampleRate * 0.1, audioCtx.sampleRate);
                         const data = buffer.getChannelData(0);
@@ -538,7 +525,7 @@
                         const noise = audioCtx.createBufferSource();
                         noise.buffer = buffer;
                         const gainNoise = audioCtx.createGain();
-                        gainNoise.gain.value = 0.02;
+                        gainNoise.gain.value = 0.05;
                         noise.connect(gainNoise);
                         gainNoise.connect(audioCtx.destination);
                         noise.start(now);
@@ -553,16 +540,15 @@
                 musicInterval = setInterval(playNext, 300);
             }
 
-            // Обновление отображения ползунка
+            // Обновление ползунка
             countSlider.addEventListener('input', function() {
                 sliderValue.textContent = this.value;
             });
 
-            // Функции управления интерфейсом
             function showControls() {
                 controls.style.display = 'flex';
                 leaderboardEl.style.display = 'block';
-                stopMusic(); // останавливаем музыку при выходе в меню
+                stopMusic();
             }
 
             function hideControls() {
@@ -638,7 +624,6 @@
 
             renderLeaderboard(parseInt(leaderboardSizeSelect.value));
 
-            // Обновление счётчика и проверка победы
             function updateCounter() {
                 if (!counterEl) return;
                 const draggableElements = document.querySelectorAll('.file-icon, .trash-icon');
@@ -648,7 +633,7 @@
                     stopStopwatch();
                     gameActive = false;
                     playSound('victory');
-                    stopMusic(); // музыка останавливается при победе
+                    stopMusic();
 
                     let playerName = prompt('Вы победили! Введите ваше имя:', 'Игрок');
                     if (!playerName) playerName = 'Игрок';
@@ -665,7 +650,6 @@
                 }
             }
 
-            // Создание перетаскиваемых элементов
             function createDraggable(className, iconClass) {
                 const div = document.createElement('div');
                 div.className = className;
@@ -674,6 +658,7 @@
                 return div;
             }
 
+            // Универсальная функция перетаскивания (мышь + касания)
             function makeDraggable(element, correctTargetSelector, allTargetsSelectors) {
                 if (!element) return;
 
@@ -719,6 +704,31 @@
                     }, 300);
                 }
 
+                function checkDrop() {
+                    if (!gameActive) return;
+
+                    if (isOverTarget(correctTargetSelector)) {
+                        playSound(correctTargetSelector === '.folder-icon' ? 'folder' : 'trash');
+                        element.classList.add('pop-effect');
+                        setTimeout(() => {
+                            element.remove();
+                            updateCounter();
+                        }, 300);
+                        return;
+                    }
+
+                    for (let targetSel of allTargetsSelectors) {
+                        if (targetSel !== correctTargetSelector && isOverTarget(targetSel)) {
+                            resetPosition();
+                            handleMistake();
+                            return;
+                        }
+                    }
+
+                    playSound('drop');
+                }
+
+                // ---- Мышь ----
                 element.addEventListener('mousedown', (e) => {
                     if (!gameActive) return;
                     e.preventDefault();
@@ -753,37 +763,56 @@
                     element.style.opacity = '';
                     element.style.transition = '';
 
+                    checkDrop();
+                }
+
+                // ---- Касания ----
+                element.addEventListener('touchstart', handleTouchStart, { passive: false });
+
+                function handleTouchStart(e) {
                     if (!gameActive) return;
+                    e.preventDefault();
+                    playSound('grab');
+                    const touch = e.touches[0];
+                    if (!touch) return;
+                    const rect = element.getBoundingClientRect();
+                    offsetX = touch.clientX - rect.left;
+                    offsetY = touch.clientY - rect.top;
 
-                    // Проверка правильного попадания
-                    if (isOverTarget(correctTargetSelector)) {
-                        playSound(correctTargetSelector === '.folder-icon' ? 'folder' : 'trash');
-                        // Анимация попадания
-                        element.classList.add('pop-effect');
-                        // Удаляем элемент после окончания анимации
-                        setTimeout(() => {
-                            element.remove();
-                            updateCounter();
-                        }, 300); // длительность анимации 0.3s
-                        return;
-                    }
+                    element.style.transform = 'none';
+                    element.style.opacity = '0.8';
+                    element.style.transition = 'none';
 
-                    // Проверка неправильного попадания
-                    for (let targetSel of allTargetsSelectors) {
-                        if (targetSel !== correctTargetSelector && isOverTarget(targetSel)) {
-                            resetPosition();
-                            handleMistake();
-                            return;
-                        }
-                    }
+                    isDragging = true;
+                    document.addEventListener('touchmove', handleTouchMove, { passive: false });
+                    document.addEventListener('touchend', handleTouchEnd);
+                    document.addEventListener('touchcancel', handleTouchEnd);
+                }
 
-                    // Никуда не попал — просто отпустили
-                    playSound('drop');
+                function handleTouchMove(e) {
+                    if (!isDragging) return;
+                    e.preventDefault();
+                    const touch = e.touches[0];
+                    if (!touch) return;
+                    element.style.left = (touch.clientX - offsetX) + 'px';
+                    element.style.top = (touch.clientY - offsetY) + 'px';
+                }
+
+                function handleTouchEnd(e) {
+                    if (!isDragging) return;
+                    isDragging = false;
+                    document.removeEventListener('touchmove', handleTouchMove);
+                    document.removeEventListener('touchend', handleTouchEnd);
+                    document.removeEventListener('touchcancel', handleTouchEnd);
+
+                    element.style.opacity = '';
+                    element.style.transition = '';
+
+                    checkDrop();
                 }
             }
 
             function startGame() {
-                // Удаляем старые перетаскиваемые элементы
                 document.querySelectorAll('.file-icon, .trash-icon').forEach(el => el.remove());
 
                 const totalCount = parseInt(countSlider.value, 10);
@@ -804,13 +833,12 @@
                 startStopwatch();
                 gameActive = true;
                 hideControls();
-                startMusic(); // запускаем музыку
+                startMusic();
                 updateCounter();
             }
 
             startBtn.addEventListener('click', startGame);
 
-            // Закрытие сообщений и возврат кнопки
             document.querySelectorAll('.close-btn').forEach(btn => {
                 btn.addEventListener('click', function(e) {
                     e.stopPropagation();
@@ -830,7 +858,6 @@
                 showControls();
             });
 
-            // Инициализация
             victoryMessage.style.display = 'none';
             loseMessage.style.display = 'none';
             showControls();
