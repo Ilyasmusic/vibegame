@@ -239,25 +239,36 @@
         }
 
         /* Мобильные стили: увеличиваем иконки */
-        @media (max-width: 768px) {
-            .folder-icon, .file-icon, .trash-icon, .cart-icon {
-                width: 100px;
-                height: 100px;
-                font-size: 60px;
-            }
-            #counter, #stopwatch, #mistakeCounter {
-                font-size: 20px;
-                padding: 8px 16px;
-            }
-            .message-box {
-                padding: 20px 30px;
-                font-size: 24px;
-            }
-            #startBtn {
-                font-size: 24px;
-                padding: 20px 30px;
-            }
-        }
+@media (max-width: 768px) {
+    .folder-icon, .file-icon, .trash-icon, .cart-icon {
+        width: 100px;
+        height: 100px;
+        font-size: 60px;
+    }
+    #counter, #stopwatch, #mistakeCounter {
+        font-size: 20px;
+        padding: 8px 16px;
+    }
+    .message-box {
+        padding: 20px 30px;
+        font-size: 24px;
+    }
+    #startBtn {
+        font-size: 24px;
+        padding: 20px 30px;
+    }
+
+    /* ----- ВСТАВЬТЕ ЭТОТ КОД ЗДЕСЬ ----- */
+    #leaderboard {
+        top: 100px;      /* отступ сверху, чтобы не перекрывать счётчики */
+        left: 10px;
+        bottom: auto;    /* отменяем нижнее позиционирование */
+        right: auto;     /* отменяем правое позиционирование */
+        max-width: 90%;  /* чтобы таблица не упиралась в правый край */
+        max-height: 200px; /* ограничиваем высоту */
+    }
+    /* --------------------------------- */
+}
     </style>
 </head>
 <body>
