@@ -156,13 +156,23 @@
         #leaderboard td { padding: 3px 5px; text-align: center; }
         #leaderboard tr:nth-child(even) { background-color: #f9f9f9; }
 
-        @media (max-width: 768px) {
-            .folder-icon, .file-icon, .trash-icon, .cart-icon { width: 100px; height: 100px; font-size: 60px; }
-            #counter, #stopwatch, #mistakeCounter { font-size: 20px; padding: 8px 16px; }
-            .message-box { padding: 20px 30px; font-size: 24px; }
-            #startBtn { font-size: 24px; padding: 20px 30px; }
-            #leaderboard { top: 100px; left: 10px; bottom: auto; right: auto; max-width: 90%; max-height: 200px; }
-        }
+       @media (max-width: 768px) {
+    .folder-icon, .file-icon, .trash-icon, .cart-icon { width: 100px; height: 100px; font-size: 60px; }
+    #counter, #stopwatch, #mistakeCounter { font-size: 20px; padding: 8px 16px; }
+    .message-box { padding: 20px 30px; font-size: 24px; }
+    #startBtn { font-size: 24px; padding: 20px 30px; }
+    #leaderboard { top: 100px; left: 10px; bottom: auto; right: auto; max-width: 90%; max-height: 200px; }
+    /* Добавленные правила для HUD */
+    .hud-container {
+        top: 10px;
+        right: 10px;
+        gap: 8px;
+    }
+    #stopwatch, #mistakeCounter {
+        font-size: 16px;
+        padding: 5px 10px;
+    }
+}
     </style>
 </head>
 <body>
@@ -202,11 +212,11 @@
         😢 Вы проиграли! Попробуйте снова.<span class="close-btn" onclick="this.parentElement.style.display='none'">×</span>
     </div>
 
-    <div style="position: fixed; top: 20px; right: 20px; z-index: 1000; display: flex; gap: 15px;">
-        <div id="stopwatch">0.000с</div>
-        <div id="mistakeCounter">Ошибки: 0/3</div>
-    </div>
-
+  <div class="hud-container" style="position: fixed; top: 20px; right: 20px; z-index: 1000; display: flex; gap: 15px;">
+    <div id="stopwatch">0.000с</div>
+    <div id="mistakeCounter">Ошибки: 0/3</div>
+</div>
+    
     <script>
         (function() {
             // DOM элементы
