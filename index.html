@@ -479,10 +479,8 @@
                     const maxTop = window.innerHeight - element.offsetHeight;
                     newX = Math.min(Math.max(newX, 0), maxLeft);
                     newY = Math.min(Math.max(newY, 0), maxTop);
-                    if (!wouldOverlapWithAnyTarget(newX, newY, allTargetsSelectors, element)) {
-                        element.style.left = newX + 'px';
-                        element.style.top = newY + 'px';
-                    }
+element.style.left = newX + 'px';
+element.style.top = newY + 'px';
                 }
                 function onMouseUp(e) {
                     if (!isDragging) return;
@@ -513,9 +511,8 @@
                     const maxTop = window.innerHeight - element.offsetHeight;
                     newX = Math.min(Math.max(newX, 0), maxLeft);
                     newY = Math.min(Math.max(newY, 0), maxTop);
-                    if (!wouldOverlapWithAnyTarget(newX, newY, allTargetsSelectors, element)) {
-                        element.style.left = newX + 'px';
-                        element.style.top = newY + 'px';
+                 element.style.left = newX + 'px';
+element.style.top = newY + 'px';
                     }
                 }
                 function handleTouchEnd(e) {
